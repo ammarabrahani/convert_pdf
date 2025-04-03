@@ -1,15 +1,8 @@
-# Use the AWS Lambda Python base image
-FROM public.ecr.aws/lambda/python:3.9
+FROM python:3.9-slim
 
-# Install system dependencies (including Poppler)
-RUN yum install -y poppler-utils && yum clean all
-
-# Copy requirements.txt first to leverage Docker cache
+WORKDIR /app
 COPY requirements.txt .
-RUN pip install -r requirements.txt --no-cache-dir
+RUN pip install --no-cache-dir -r requirements.txt
+COPY . .
 
-# Copy the application code
-COPY main.py ./
-
-# Set the CMD to your handler
-CMD ["main.handler"]
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
