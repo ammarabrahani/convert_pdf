@@ -1,8 +1,12 @@
-FROM python:3.9  # or python:3.9-slim
+# Use a slim Python 3.9 base image
+FROM python:3.9-slim
 
 WORKDIR /app
+
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt  # This must include uvicorn
+
+RUN pip install --no-cache-dir -r requirements.txt
+
 COPY . .
 
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
